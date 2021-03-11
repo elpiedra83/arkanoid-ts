@@ -3,6 +3,7 @@ import { Vector } from "../types";
 export class Ball {
   private speed: Vector;
   private ballImage: HTMLImageElement = new Image();
+  private dt: number;
 
   constructor(
     speed: number,
@@ -10,6 +11,7 @@ export class Ball {
     private position: Vector,
     image: string
   ) {
+    this.dt = 0.0002;
     this.ballSize = ballSize;
     this.position = position;
     this.speed = {

@@ -131,9 +131,11 @@ function () {
   function CanvasView(canvasName) {
     this.canvas = document.querySelector(canvasName);
     this.context = this.canvas.getContext("2d");
-    this.scoreDisplay = document.querySelector("#scored");
+    this.scoreDisplay = document.querySelector("#score");
     this.start = document.querySelector("#start");
     this.info = document.querySelector("#info");
+    this.lives = document.querySelector("#lives");
+    this.level = document.querySelector("#level");
   }
 
   CanvasView.prototype.clear = function () {
@@ -148,16 +150,32 @@ function () {
     var _a;
 
     (_a = this.start) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-      return startFunction(_this);
+      var _a;
+
+      var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3");
+      audio.play();
+      startFunction(_this);
+      (_a = _this.start) === null || _a === void 0 ? void 0 : _a.style.display = "none";
     });
   };
 
   CanvasView.prototype.drawScore = function (score) {
-    if (this.scoreDisplay) this.scoreDisplay.innerHTML = score.toString();
+    if (this.scoreDisplay) this.scoreDisplay.innerHTML = "Score " + score.toString();
   };
 
   CanvasView.prototype.drawInfo = function (text) {
+    var _a;
+
     if (this.info) this.info.innerHTML = text;
+    (_a = this.start) === null || _a === void 0 ? void 0 : _a.style.display = "block";
+  };
+
+  CanvasView.prototype.drawLevel = function (num, text) {
+    if (this.level) this.level.innerHTML = "Level " + num + ": " + text;
+  };
+
+  CanvasView.prototype.drawLives = function (num) {
+    if (this.lives) this.lives.innerHTML = "Lives " + num.toString();
   };
 
   CanvasView.prototype.drawSprite = function (brick) {
@@ -194,6 +212,7 @@ function () {
     this.ballSize = ballSize;
     this.position = position;
     this.ballImage = new Image();
+    this.dt = 0.0002;
     this.ballSize = ballSize;
     this.position = position;
     this.speed = {
@@ -388,13 +407,20 @@ function () {
 
   Collision.prototype.checkBallCollision = function (ball, paddle, view) {
     //1. Check ball collision with paddle
+    var audio = new Audio();
+
     if (ball.pos.x + ball.width > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.height === paddle.pos.y) {
+      audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3");
+      audio.play();
       ball.changeYDirection();
     } //2. Check ball collision with walls
     // Ball movement X contraints
 
 
     if (ball.pos.x > view.canvas.width - ball.width || ball.pos.x < 0) {
+      audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3");
+      audio.currentTime = 0;
+      audio.play();
       ball.changeXDirection();
     } // Ball movement Y contraints
 
@@ -428,7 +454,7 @@ module.exports = "/brick-purple.088683b7.png";
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LEVEL = exports.BRICK_ENERGY = exports.BRICK_IMAGES = exports.BALL_STARTY = exports.BALL_STARTX = exports.BALL_SIZE = exports.BALL_SPEED = exports.PADDLE_SPEED = exports.PADDLE_STARTX = exports.PADDLE_HEIGHT = exports.PADDLE_WIDTH = exports.BRICK_HEIGHT = exports.BRICK_WIDTH = exports.BRICK_PADDING = exports.STAGE_COLS = exports.STAGE_ROWS = exports.STAGE_PADDING = void 0;
+exports.LEVELS = exports.BRICK_ENERGY = exports.BRICK_IMAGES = exports.INITIAL_LEVEL = exports.BALL_STARTY = exports.BALL_STARTX = exports.BALL_SIZE = exports.BALL_SPEED = exports.PADDLE_SPEED = exports.PADDLE_STARTX = exports.PADDLE_HEIGHT = exports.PADDLE_WIDTH = exports.BRICK_HEIGHT = exports.BRICK_WIDTH = exports.BRICK_PADDING = exports.STAGE_COLS = exports.STAGE_ROWS = exports.STAGE_PADDING = void 0;
 
 var _brickRed = _interopRequireDefault(require("./images/brick-red.png"));
 
@@ -444,7 +470,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Grab the canvas element for calculating the brick width
 // depending on canvas width
-var canvas = document.querySelector('#playField'); // Constants
+var canvas = document.querySelector("#playField"); // Constants
 
 var STAGE_PADDING = 10;
 exports.STAGE_PADDING = STAGE_PADDING;
@@ -464,7 +490,7 @@ var PADDLE_HEIGHT = 25;
 exports.PADDLE_HEIGHT = PADDLE_HEIGHT;
 var PADDLE_STARTX = 450;
 exports.PADDLE_STARTX = PADDLE_STARTX;
-var PADDLE_SPEED = 10;
+var PADDLE_SPEED = 15;
 exports.PADDLE_SPEED = PADDLE_SPEED;
 var BALL_SPEED = 5;
 exports.BALL_SPEED = BALL_SPEED;
@@ -472,8 +498,10 @@ var BALL_SIZE = 20;
 exports.BALL_SIZE = BALL_SIZE;
 var BALL_STARTX = 500;
 exports.BALL_STARTX = BALL_STARTX;
-var BALL_STARTY = 400;
+var BALL_STARTY = 550;
 exports.BALL_STARTY = BALL_STARTY;
+var INITIAL_LEVEL = 1;
+exports.INITIAL_LEVEL = INITIAL_LEVEL;
 var BRICK_IMAGES = {
   1: _brickRed.default,
   2: _brickGreen.default,
@@ -484,16 +512,35 @@ var BRICK_IMAGES = {
 exports.BRICK_IMAGES = BRICK_IMAGES;
 var BRICK_ENERGY = {
   1: 1,
-  2: 1,
-  3: 2,
-  4: 2,
-  5: 3 // Purple brick
-
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5
 }; // prettier-ignore
 
 exports.BRICK_ENERGY = BRICK_ENERGY;
-var LEVEL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 5, 0, 0, 5, 5, 0, 0];
-exports.LEVEL = LEVEL;
+var LEVELS = [{
+  number: 0,
+  name: 'Default',
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}, {
+  number: 1,
+  name: 'Zero',
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 5, 0, 0, 5, 5, 0, 0]
+}, {
+  number: 2,
+  name: 'Easy',
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 0, 1, 3, 3, 3, 0, 0, 3, 3, 3, 1, 0, 0, 4, 4, 0, 0, 4, 4, 0, 0, 0, 0, 1, 5, 0, 0, 1, 5, 0, 0]
+}, {
+  number: 3,
+  name: 'Random',
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 4, 5, 5, 4, 4, 3, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+}, {
+  number: 4,
+  name: 'Luis',
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 2, 3, 4, 4, 4, 0, 1, 0, 2, 0, 2, 3, 4, 0, 0, 0, 1, 0, 2, 0, 2, 3, 4, 4, 4, 0, 1, 0, 2, 0, 2, 3, 0, 0, 4, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4, 0]
+}];
+exports.LEVELS = LEVELS;
 },{"./images/brick-red.png":"images/brick-red.png","./images/brick-blue.png":"images/brick-blue.png","./images/brick-green.png":"images/brick-green.png","./images/brick-yellow.png":"images/brick-yellow.png","./images/brick-purple.png":"images/brick-purple.png"}],"sprites/Brick.ts":[function(require,module,exports) {
 "use strict";
 
@@ -588,8 +635,13 @@ var __spreadArrays = void 0 && (void 0).__spreadArrays || function () {
   return r;
 };
 
-function createBricks() {
-  return _setup.LEVEL.reduce(function (ack, element, i) {
+function createBricks(level) {
+  // console.log(LEVELS);
+  // let currentLevel = ;
+  // console.log(currentLevel);
+  return _setup.LEVELS.find(function (lev) {
+    return lev.number === level;
+  }).disposition.reduce(function (acumulator, element, i) {
     var row = Math.floor((i + 1) / _setup.STAGE_COLS); //gives the current row of the specific brick
 
     var col = i % _setup.STAGE_COLS; //correct column for the specific brick
@@ -597,8 +649,8 @@ function createBricks() {
     var x = _setup.STAGE_PADDING + col * (_setup.BRICK_WIDTH + _setup.BRICK_PADDING); //STAGE_PADDING is the space between walls and canvas
 
     var y = _setup.STAGE_PADDING + row * (_setup.BRICK_HEIGHT + _setup.BRICK_PADDING);
-    if (element === 0) return ack;
-    return __spreadArrays(ack, [new _Brick.Brick(_setup.BRICK_WIDTH, _setup.BRICK_HEIGHT, {
+    if (element === 0) return acumulator;
+    return __spreadArrays(acumulator, [new _Brick.Brick(_setup.BRICK_WIDTH, _setup.BRICK_HEIGHT, {
       x: x,
       y: y
     }, _setup.BRICK_ENERGY[element], _setup.BRICK_IMAGES[element])]);
@@ -629,19 +681,57 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Level and colors
 var gameOver = false;
 var score = 0;
+var lives = 3;
+var level = _setup.INITIAL_LEVEL;
+var actualLevel = undefined;
+var levelName = ""; //Create all bricks
+
+var bricks = (0, _helpers.createBricks)(level);
+var actualBricks = (0, _helpers.createBricks)(0);
 
 function setGameOver(view) {
-  view.drawInfo("Game Over!");
   gameOver = false;
+
+  if (lives !== 0) {
+    actualBricks = bricks;
+    view.drawInfo("Play next life");
+    lives = lives - 1;
+    var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3");
+    audio.play();
+    nextLife(view);
+  } else {
+    view.drawInfo("Game Over!");
+    actualLevel = 0;
+    level = _setup.INITIAL_LEVEL;
+    lives = 3;
+    score = 0;
+    bricks = (0, _helpers.createBricks)(level);
+    view.clear();
+  }
 }
 
 function setGameWin(view) {
-  view.drawInfo("Game Won!");
+  var _a;
+
   gameOver = false;
+
+  if (level <= _setup.LEVELS.length - 1) {
+    level = level + 1;
+    levelName = (_a = _setup.LEVELS.find(function (lev) {
+      return lev.number === level;
+    })) === null || _a === void 0 ? void 0 : _a.name;
+    view.drawInfo("Level win! prepare for the next level " + levelName);
+    bricks = (0, _helpers.createBricks)(level);
+    view.clear();
+  } else {
+    level = _setup.INITIAL_LEVEL;
+    view.drawInfo("CONGRATS!!! YOU WON THE GAME");
+    bricks = (0, _helpers.createBricks)(level);
+    view.clear();
+  }
 }
 
 function gameLoop(view, bricks, paddle, ball, collision) {
-  console.log("draw!");
   view.clear();
   view.drawBricks(bricks);
   view.drawSprite(paddle);
@@ -659,29 +749,50 @@ function gameLoop(view, bricks, paddle, ball, collision) {
 
   if (collidingBrick) {
     score += 1;
+    var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3");
+    audio.play();
     view.drawScore(score);
-  } //Game Over when ball leaves playField
+  } //Game Over when ball leaves playField or bricks are zero
 
 
-  if (ball.pos.y > view.canvas.height) gameOver = true; //If game won, set GameOVer and display win
+  if (ball.pos.y > view.canvas.height || bricks.length === 0) {
+    gameOver = true; //If game won, set GameOVer and display win
 
-  if (bricks.length === 0) return setGameWin(view); // Return if gameover and dont run the requestAnimateFram
+    if (bricks.length === 0) return setGameWin(view); // Return if gameover and dont run the requestAnimateFram
 
-  if (gameOver) return setGameOver(view);
+    if (gameOver) return setGameOver(view);
+  }
+
   requestAnimationFrame(function () {
     return gameLoop(view, bricks, paddle, ball, collision);
   });
 }
 
 function startGame(view) {
-  //Reset display
-  score = 0;
+  var _a, _b; //Reset display
+
+
+  level = (_a = _setup.LEVELS.find(function (lev) {
+    return lev.number === level;
+  })) === null || _a === void 0 ? void 0 : _a.number;
+  levelName = (_b = _setup.LEVELS.find(function (lev) {
+    return lev.number === level;
+  })) === null || _b === void 0 ? void 0 : _b.name;
   view.drawInfo("");
-  view.drawScore(0); //Create a colLision instance
+  view.drawScore(score);
+  view.drawLives(lives);
+  view.drawLevel(level, levelName); //Create a colLision instance
 
-  var collision = new _Collision.Collision(); //Create all bricks
+  var collision = new _Collision.Collision();
 
-  var bricks = (0, _helpers.createBricks)(); //Create a Ball
+  if (level !== actualLevel) {
+    //Create initial Bricks for the new level
+    bricks = (0, _helpers.createBricks)(level);
+    actualLevel = level;
+  } else {
+    bricks = actualBricks;
+  } //Create a Ball
+
 
   var ball = new _Ball.Ball(_setup.BALL_SPEED, _setup.BALL_SIZE, {
     x: _setup.BALL_STARTX,
@@ -693,6 +804,21 @@ function startGame(view) {
     y: view.canvas.height - _setup.PADDLE_HEIGHT - 5
   }, _paddle.default);
   gameLoop(view, bricks, paddle, ball, collision);
+}
+
+function nextLife(view) {
+  var _a, _b; //Next live display
+
+
+  level = (_a = _setup.LEVELS.find(function (lev) {
+    return lev.number === level;
+  })) === null || _a === void 0 ? void 0 : _a.number;
+  levelName = (_b = _setup.LEVELS.find(function (lev) {
+    return lev.number === level;
+  })) === null || _b === void 0 ? void 0 : _b.name;
+  view.drawScore(score);
+  view.drawLives(lives);
+  view.drawLevel(level, levelName);
 } //Create a new view
 
 
@@ -726,7 +852,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52211" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61209" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

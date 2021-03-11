@@ -9,13 +9,17 @@ export class CanvasView {
   private scoreDisplay: HTMLObjectElement | null;
   private start: HTMLBodyElement | null;
   private info: HTMLObjectElement | null;
+  private lives: HTMLObjectElement | null;
+  private level: HTMLObjectElement | null;
 
   constructor(canvasName: string) {
     this.canvas = document.querySelector(canvasName) as HTMLCanvasElement;
     this.context = this.canvas.getContext("2d");
-    this.scoreDisplay = document.querySelector("#scored");
+    this.scoreDisplay = document.querySelector("#score");
     this.start = document.querySelector("#start");
     this.info = document.querySelector("#info");
+    this.lives = document.querySelector("#lives");
+    this.level = document.querySelector("#level");
   }
 
   clear(): void {
@@ -23,15 +27,32 @@ export class CanvasView {
   }
 
   initStartButton(startFunction: (view: CanvasView) => void): void {
-    this.start?.addEventListener("click", () => startFunction(this));
+    this.start?.addEventListener("click", () => {
+      let audio = new Audio(
+        "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
+      );
+      audio.play();
+      startFunction(this);
+      this.start?.style.display = "none";
+    });
   }
 
   drawScore(score: number): void {
-    if (this.scoreDisplay) this.scoreDisplay.innerHTML = score.toString();
+    if (this.scoreDisplay)
+      this.scoreDisplay.innerHTML = `Score ${score.toString()}`;
   }
 
   drawInfo(text: string): void {
     if (this.info) this.info.innerHTML = text;
+    this.start?.style.display = "block";
+  }
+
+  drawLevel(num: number | undefined, text: string | undefined): void {
+    if (this.level) this.level.innerHTML = `Level ${num}: ${text}`;
+  }
+
+  drawLives(num: number): void {
+    if (this.lives) this.lives.innerHTML = `Lives ${num.toString()}`;
   }
 
   drawSprite(brick: Brick | Paddle | Ball): void {
