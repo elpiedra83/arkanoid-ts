@@ -28,11 +28,15 @@ export class CanvasView {
     this.context?.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  showOptions(): void {
+    this.dificultyParent!.style.display = "grid";
+  }
+
   initStartButton(startFunction: (view: CanvasView) => void): void {
     this.start!.innerHTML = `Start`;
     this.start?.addEventListener("click", () => {
       let audio = new Audio(
-        "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
+        "https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"
       );
       audio.play();
       startFunction(this);

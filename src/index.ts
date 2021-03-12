@@ -33,10 +33,20 @@ let ballSpeed = 0;
 let paddleWidth = 0;
 let dificulty = "";
 
+document.getElementById("start")!.addEventListener("click", function (e) {
+  let audio = new Audio(
+    "https://assets.mixkit.co/sfx/preview/mixkit-magic-sweep-game-trophy-257.mp3"
+  );
+  audio.play();
+});
+
 document.getElementById("dificulty")!.addEventListener("click", function (e) {
   let target = e.target as HTMLInputElement;
-  console.log(target.value);
   dificulty = target.value;
+  let audio = new Audio(
+    "https://assets.mixkit.co/sfx/preview/mixkit-martial-arts-punch-2052.mp3"
+  );
+  audio.play();
 });
 
 function setDificulty() {
@@ -72,7 +82,7 @@ function setGameOver(view: CanvasView) {
     view.drawInfo("Play next life");
     lives = lives - 1;
     let audio = new Audio(
-      "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"
+      "https://assets.mixkit.co/sfx/preview/mixkit-arcade-space-shooter-dead-notification-272.mp3"
     );
     audio.play();
     nextLife(view);
@@ -83,7 +93,12 @@ function setGameOver(view: CanvasView) {
     lives = 3;
     score = 0;
     bricks = createBricks(level);
+    let audio = new Audio(
+      "https://assets.mixkit.co/sfx/preview/mixkit-player-losing-or-failing-2042.mp3"
+    );
+    audio.play();
     view.clear();
+    view.showOptions();
   }
 }
 
@@ -94,6 +109,11 @@ function setGameWin(view: CanvasView) {
     levelName = LEVELS.find((lev) => lev.number === level)?.name;
     view.drawInfo("Level win! prepare for the next level " + levelName);
     bricks = createBricks(level);
+    let audio = new Audio(
+      "https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3"
+    );
+    audio.play();
+
     view.clear();
   } else {
     level = INITIAL_LEVEL;
@@ -131,7 +151,7 @@ function gameLoop(
   if (collidingBrick) {
     score += 1;
     let audio = new Audio(
-      "https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3"
+      "https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"
     );
     audio.play();
     view.drawScore(score);

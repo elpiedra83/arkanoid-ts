@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel serve src/index.html",
-    "watch": "parcel watch src/index.html"
+    "watch": "parcel watch src/index.html",
+    "build": "tsc --build",
+  "clean": "tsc --build --clean"
   },
   "author": "",
   "license": "ISC",
