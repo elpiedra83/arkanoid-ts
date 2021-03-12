@@ -8,7 +8,6 @@ var CanvasView = /** @class */ (function () {
         this.lives = document.querySelector("#lives");
         this.level = document.querySelector("#level");
         this.dificultyParent = document.querySelector("#dificultyParent");
-        this.dificulty = Array.from(document.getElementsByName("dificulty")).find(function (r) { return r.checked; }).value;
     }
     CanvasView.prototype.clear = function () {
         var _a;
@@ -16,16 +15,14 @@ var CanvasView = /** @class */ (function () {
     };
     CanvasView.prototype.initStartButton = function (startFunction) {
         var _this = this;
-        var _a, _b;
-        (_a = this.start) === null || _a === void 0 ? void 0 : _a.innerHTML = "Start";
-        (_b = this.start) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
-            var _a, _b;
+        var _a;
+        this.start.innerHTML = "Start";
+        (_a = this.start) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
             var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3");
             audio.play();
             startFunction(_this);
-            (_a = _this.start) === null || _a === void 0 ? void 0 : _a.style.display = "none";
-            (_b = _this.dificultyParent) === null || _b === void 0 ? void 0 : _b.style.display = "none";
-            console.log(_this.dificulty);
+            _this.start.style.display = "none";
+            _this.dificultyParent.style.display = "none";
         });
     };
     CanvasView.prototype.drawScore = function (score) {
@@ -33,10 +30,9 @@ var CanvasView = /** @class */ (function () {
             this.scoreDisplay.innerHTML = "<span class=\"headerTexts\">SCORE</span><span>" + score.toString() + "</span>";
     };
     CanvasView.prototype.drawInfo = function (text) {
-        var _a;
         if (this.info)
             this.info.innerHTML = text;
-        (_a = this.start) === null || _a === void 0 ? void 0 : _a.style.display = "block";
+        this.start.style.display = "block";
     };
     CanvasView.prototype.drawLevel = function (num, text) {
         if (this.level)

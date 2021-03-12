@@ -33,31 +33,34 @@ let ballSpeed = 0;
 let paddleWidth = 0;
 let dificulty = "";
 
-document
-  .getElementById("dificulty")
-  .addEventListener("click", function (event) {
-    if (event.target && event.target.matches("input[type='radio']")) {
-      dificulty = event.target.value;
-    }
-  });
+document.getElementById("dificulty")!.addEventListener("click", function (e) {
+  let target = e.target as HTMLInputElement;
+  console.log(target.value);
+  dificulty = target.value;
+});
 
-function setDificulty{
-    switch (dificulty) {
-    case 'easy':
+function setDificulty() {
+  switch (dificulty) {
+    case "easy":
       paddleSpeed = 25;
       ballSpeed = 5;
       paddleWidth = 250;
-    break
+      break;
     case "normal":
       paddleSpeed = 20;
       ballSpeed = 10;
       paddleWidth = 200;
-    break
+      break;
     case "hard":
       paddleSpeed = 15;
       ballSpeed = 15;
       paddleWidth = 100;
-    break
+      break;
+    default:
+      paddleSpeed = 20;
+      ballSpeed = 10;
+      paddleWidth = 200;
+      break;
   }
 }
 
@@ -86,8 +89,8 @@ function setGameOver(view: CanvasView) {
 
 function setGameWin(view: CanvasView) {
   gameOver = false;
-  if (level <= LEVELS.length - 1) {
-    level = level + 1;
+  if (level! <= LEVELS.length - 1) {
+    level = level! + 1;
     levelName = LEVELS.find((lev) => lev.number === level)?.name;
     view.drawInfo("Level win! prepare for the next level " + levelName);
     bricks = createBricks(level);

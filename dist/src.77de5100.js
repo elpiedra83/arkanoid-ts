@@ -137,9 +137,6 @@ function () {
     this.lives = document.querySelector("#lives");
     this.level = document.querySelector("#level");
     this.dificultyParent = document.querySelector("#dificultyParent");
-    this.dificulty = Array.from(document.getElementsByName("dificulty")).find(function (r) {
-      return r.checked;
-    }).value;
   }
 
   CanvasView.prototype.clear = function () {
@@ -151,18 +148,15 @@ function () {
   CanvasView.prototype.initStartButton = function (startFunction) {
     var _this = this;
 
-    var _a, _b;
+    var _a;
 
-    (_a = this.start) === null || _a === void 0 ? void 0 : _a.innerHTML = "Start";
-    (_b = this.start) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
-      var _a, _b;
-
+    this.start.innerHTML = "Start";
+    (_a = this.start) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
       var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3");
       audio.play();
       startFunction(_this);
-      (_a = _this.start) === null || _a === void 0 ? void 0 : _a.style.display = "none";
-      (_b = _this.dificultyParent) === null || _b === void 0 ? void 0 : _b.style.display = "none";
-      console.log(_this.dificulty);
+      _this.start.style.display = "none";
+      _this.dificultyParent.style.display = "none";
     });
   };
 
@@ -171,10 +165,8 @@ function () {
   };
 
   CanvasView.prototype.drawInfo = function (text) {
-    var _a;
-
     if (this.info) this.info.innerHTML = text;
-    (_a = this.start) === null || _a === void 0 ? void 0 : _a.style.display = "block";
+    this.start.style.display = "block";
   };
 
   CanvasView.prototype.drawLevel = function (num, text) {
@@ -697,15 +689,15 @@ var paddleSpeed = 0;
 var ballSpeed = 0;
 var paddleWidth = 0;
 var dificulty = "";
-document.getElementById("dificulty").addEventListener("click", function (event) {
-  if (event.target && event.target.matches("input[type='radio']")) {
-    dificulty = event.target.value;
-  }
+document.getElementById("dificulty").addEventListener("click", function (e) {
+  var target = e.target;
+  console.log(target.value);
+  dificulty = target.value;
 });
 
 function setDificulty() {
   switch (dificulty) {
-    case 'easy':
+    case "easy":
       paddleSpeed = 25;
       ballSpeed = 5;
       paddleWidth = 250;
@@ -721,6 +713,12 @@ function setDificulty() {
       paddleSpeed = 15;
       ballSpeed = 15;
       paddleWidth = 100;
+      break;
+
+    default:
+      paddleSpeed = 20;
+      ballSpeed = 10;
+      paddleWidth = 200;
       break;
   }
 }

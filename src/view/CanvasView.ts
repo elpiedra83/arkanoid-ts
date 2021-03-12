@@ -11,7 +11,6 @@ export class CanvasView {
   private info: HTMLObjectElement | null;
   private lives: HTMLObjectElement | null;
   private level: HTMLObjectElement | null;
-  private dificulty: HTMLObjectElement | null;
   private dificultyParent: HTMLObjectElement | null;
 
   constructor(canvasName: string) {
@@ -23,9 +22,6 @@ export class CanvasView {
     this.lives = document.querySelector("#lives");
     this.level = document.querySelector("#level");
     this.dificultyParent = document.querySelector("#dificultyParent");
-    this.dificulty = Array.from(document.getElementsByName("dificulty")).find(
-      (r) => r.checked
-    ).value;
   }
 
   clear(): void {
@@ -33,16 +29,15 @@ export class CanvasView {
   }
 
   initStartButton(startFunction: (view: CanvasView) => void): void {
-    this.start?.innerHTML = `Start`;
+    this.start!.innerHTML = `Start`;
     this.start?.addEventListener("click", () => {
       let audio = new Audio(
         "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
       );
       audio.play();
       startFunction(this);
-      this.start?.style.display = "none";
-      this.dificultyParent?.style.display = "none";
-      console.log(this.dificulty);
+      this.start!.style.display = "none";
+      this.dificultyParent!.style.display = "none";
     });
   }
 
@@ -53,7 +48,7 @@ export class CanvasView {
 
   drawInfo(text: string): void {
     if (this.info) this.info.innerHTML = text;
-    this.start?.style.display = "block";
+    this.start!.style.display = "block";
   }
 
   drawLevel(num: number | undefined, text: string | undefined): void {

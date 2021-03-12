@@ -21,16 +21,18 @@ var paddleSpeed = 0;
 var ballSpeed = 0;
 var paddleWidth = 0;
 var dificulty = "";
-document
-    .getElementById("dificulty")
-    .addEventListener("click", function (event) {
-    if (event.target && event.target.matches("input[type='radio']")) {
-        dificulty = event.target.value;
-    }
+document.getElementById("dificulty").addEventListener("click", function (e) {
+    // console.log((e.target as HTMLInputElement).value);
+    var target = e.target;
+    console.log(target.value);
+    // console.log(event);
+    // if (target && target.matches("input[type='radio']")) {
+    dificulty = target.value;
+    // }
 });
 function setDificulty() {
     switch (dificulty) {
-        case 'easy':
+        case "easy":
             paddleSpeed = 25;
             ballSpeed = 5;
             paddleWidth = 250;
@@ -44,6 +46,11 @@ function setDificulty() {
             paddleSpeed = 15;
             ballSpeed = 15;
             paddleWidth = 100;
+            break;
+        default:
+            paddleSpeed = 20;
+            ballSpeed = 10;
+            paddleWidth = 200;
             break;
     }
 }
