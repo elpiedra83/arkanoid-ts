@@ -13,12 +13,15 @@ var CanvasView = /** @class */ (function () {
         var _a;
         (_a = this.context) === null || _a === void 0 ? void 0 : _a.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
+    CanvasView.prototype.showOptions = function () {
+        this.dificultyParent.style.display = "grid";
+    };
     CanvasView.prototype.initStartButton = function (startFunction) {
         var _this = this;
         var _a;
         this.start.innerHTML = "Start";
         (_a = this.start) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-            var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3");
+            var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3");
             audio.play();
             startFunction(_this);
             _this.start.style.display = "none";

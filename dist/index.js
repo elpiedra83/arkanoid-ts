@@ -21,10 +21,15 @@ var paddleSpeed = 0;
 var ballSpeed = 0;
 var paddleWidth = 0;
 var dificulty = "";
+document.getElementById("start").addEventListener("click", function (e) {
+    var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-magic-sweep-game-trophy-257.mp3");
+    audio.play();
+});
 document.getElementById("dificulty").addEventListener("click", function (e) {
     var target = e.target;
-    console.log(target.value);
     dificulty = target.value;
+    var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-martial-arts-punch-2052.mp3");
+    audio.play();
 });
 function setDificulty() {
     switch (dificulty) {
@@ -57,7 +62,7 @@ function setGameOver(view) {
         view.clear();
         view.drawInfo("Play next life");
         lives = lives - 1;
-        var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3");
+        var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-arcade-space-shooter-dead-notification-272.mp3");
         audio.play();
         nextLife(view);
     }
@@ -68,7 +73,10 @@ function setGameOver(view) {
         lives = 3;
         score = 0;
         bricks = createBricks(level);
+        var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-player-losing-or-failing-2042.mp3");
+        audio.play();
         view.clear();
+        view.showOptions();
     }
 }
 function setGameWin(view) {
@@ -79,6 +87,8 @@ function setGameWin(view) {
         levelName = (_a = LEVELS.find(function (lev) { return lev.number === level; })) === null || _a === void 0 ? void 0 : _a.name;
         view.drawInfo("Level win! prepare for the next level " + levelName);
         bricks = createBricks(level);
+        var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3");
+        audio.play();
         view.clear();
     }
     else {
@@ -105,7 +115,7 @@ function gameLoop(view, bricks, paddle, ball, collision) {
     var collidingBrick = collision.isCollidingBricks(ball, bricks);
     if (collidingBrick) {
         score += 1;
-        var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3");
+        var audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3");
         audio.play();
         view.drawScore(score);
     }

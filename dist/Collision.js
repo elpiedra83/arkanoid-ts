@@ -34,7 +34,7 @@ var Collision = /** @class */ (function () {
         if (ball.pos.x + ball.width > paddle.pos.x &&
             ball.pos.x < paddle.pos.x + paddle.width &&
             ball.pos.y + ball.height === paddle.pos.y) {
-            audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3");
+            audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-player-jumping-in-a-video-game-2043.mp3");
             audio.play();
             ball.changeYDirection();
             if (ball.pos.x < paddle.pos.x + paddle.width / 2)
@@ -45,7 +45,7 @@ var Collision = /** @class */ (function () {
         //2. Check ball collision with walls
         // Ball movement X contraints
         if (ball.pos.x > view.canvas.width - ball.width || ball.pos.x < 0) {
-            audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3");
+            audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3");
             audio.currentTime = 0;
             audio.play();
             ball.changeXDirection();
