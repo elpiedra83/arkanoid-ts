@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: Arcade;
-  src: url(../fonts/ARCADECLASSIC.TTF);
+  src: url(/ARCADECLASSIC.decbcc65.TTF);
 }
 
 * {
@@ -182,4 +182,6 @@ p {
     opacity: 1;
   }
 }
-/*# sourceMappingURL=style.css.map */
+
+
+/*# sourceMappingURL=/style.78032849.css.map */

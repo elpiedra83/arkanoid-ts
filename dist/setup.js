@@ -38,7 +38,7 @@ export var BRICK_ENERGY = {
     2: 2,
     3: 3,
     4: 4,
-    5: 5, // Purple brick
+    5: 5,
 };
 // prettier-ignore
 export var LEVELS = [
