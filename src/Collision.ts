@@ -47,6 +47,8 @@ export class Collision {
       );
       audio.play();
       ball.changeYDirection();
+      if (ball.pos.x < paddle.pos.x + paddle.width / 2) ball.changeXDirection();
+      if (ball.pos.x < paddle.pos.x - paddle.width / 2) ball.changeYDirection();
     }
     //2. Check ball collision with walls
     // Ball movement X contraints

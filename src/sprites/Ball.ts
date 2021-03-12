@@ -11,7 +11,7 @@ export class Ball {
     private position: Vector,
     image: string
   ) {
-    this.dt = 0.0002;
+    this.dt = 1.0002;
     this.ballSize = ballSize;
     this.position = position;
     this.speed = {
@@ -39,11 +39,11 @@ export class Ball {
     this.speed.y = -this.speed.y;
   }
   changeXDirection(): void {
-    this.speed.x = -this.speed.x;
+    this.speed.x = -this.speed.x * this.dt;
   }
 
   moveBall(): void {
-    this.pos.x += this.speed.x;
+    this.pos.x += this.speed.x * this.dt;
     this.pos.y += this.speed.y;
   }
 }

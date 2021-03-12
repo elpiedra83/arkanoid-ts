@@ -136,6 +136,10 @@ function () {
     this.info = document.querySelector("#info");
     this.lives = document.querySelector("#lives");
     this.level = document.querySelector("#level");
+    this.dificultyParent = document.querySelector("#dificultyParent");
+    this.dificulty = Array.from(document.getElementsByName("dificulty")).find(function (r) {
+      return r.checked;
+    }).value;
   }
 
   CanvasView.prototype.clear = function () {
@@ -147,20 +151,23 @@ function () {
   CanvasView.prototype.initStartButton = function (startFunction) {
     var _this = this;
 
-    var _a;
+    var _a, _b;
 
-    (_a = this.start) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
-      var _a;
+    (_a = this.start) === null || _a === void 0 ? void 0 : _a.innerHTML = "Start";
+    (_b = this.start) === null || _b === void 0 ? void 0 : _b.addEventListener("click", function () {
+      var _a, _b;
 
       var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3");
       audio.play();
       startFunction(_this);
       (_a = _this.start) === null || _a === void 0 ? void 0 : _a.style.display = "none";
+      (_b = _this.dificultyParent) === null || _b === void 0 ? void 0 : _b.style.display = "none";
+      console.log(_this.dificulty);
     });
   };
 
   CanvasView.prototype.drawScore = function (score) {
-    if (this.scoreDisplay) this.scoreDisplay.innerHTML = "Score " + score.toString();
+    if (this.scoreDisplay) this.scoreDisplay.innerHTML = "<span class=\"headerTexts\">SCORE</span><span>" + score.toString() + "</span>";
   };
 
   CanvasView.prototype.drawInfo = function (text) {
@@ -175,7 +182,7 @@ function () {
   };
 
   CanvasView.prototype.drawLives = function (num) {
-    if (this.lives) this.lives.innerHTML = "Lives " + num.toString();
+    if (this.lives) this.lives.innerHTML = "<span style=\"color:red;\">\u2764</span> " + num.toString();
   };
 
   CanvasView.prototype.drawSprite = function (brick) {
@@ -212,7 +219,7 @@ function () {
     this.ballSize = ballSize;
     this.position = position;
     this.ballImage = new Image();
-    this.dt = 0.0002;
+    this.dt = 1.0002;
     this.ballSize = ballSize;
     this.position = position;
     this.speed = {
@@ -256,11 +263,11 @@ function () {
   };
 
   Ball.prototype.changeXDirection = function () {
-    this.speed.x = -this.speed.x;
+    this.speed.x = -this.speed.x * this.dt;
   };
 
   Ball.prototype.moveBall = function () {
-    this.pos.x += this.speed.x;
+    this.pos.x += this.speed.x * this.dt;
     this.pos.y += this.speed.y;
   };
 
@@ -413,6 +420,8 @@ function () {
       audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3");
       audio.play();
       ball.changeYDirection();
+      if (ball.pos.x < paddle.pos.x + paddle.width / 2) ball.changeXDirection();
+      if (ball.pos.x < paddle.pos.x - paddle.width / 2) ball.changeYDirection();
     } //2. Check ball collision with walls
     // Ball movement X contraints
 
@@ -454,7 +463,7 @@ module.exports = "/brick-purple.088683b7.png";
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LEVELS = exports.BRICK_ENERGY = exports.BRICK_IMAGES = exports.INITIAL_LEVEL = exports.BALL_STARTY = exports.BALL_STARTX = exports.BALL_SIZE = exports.BALL_SPEED = exports.PADDLE_SPEED = exports.PADDLE_STARTX = exports.PADDLE_HEIGHT = exports.PADDLE_WIDTH = exports.BRICK_HEIGHT = exports.BRICK_WIDTH = exports.BRICK_PADDING = exports.STAGE_COLS = exports.STAGE_ROWS = exports.STAGE_PADDING = void 0;
+exports.LEVELS = exports.BRICK_ENERGY = exports.BRICK_IMAGES = exports.INITIAL_LEVEL = exports.BALL_STARTY = exports.BALL_STARTX = exports.BALL_SIZE = exports.PADDLE_STARTX = exports.PADDLE_HEIGHT = exports.BRICK_HEIGHT = exports.BRICK_WIDTH = exports.BRICK_PADDING = exports.STAGE_COLS = exports.STAGE_ROWS = exports.STAGE_PADDING = void 0;
 
 var _brickRed = _interopRequireDefault(require("./images/brick-red.png"));
 
@@ -472,33 +481,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // depending on canvas width
 var canvas = document.querySelector("#playField"); // Constants
 
-var STAGE_PADDING = 10;
+var STAGE_PADDING = 15;
 exports.STAGE_PADDING = STAGE_PADDING;
-var STAGE_ROWS = 20;
+var STAGE_ROWS = 25;
 exports.STAGE_ROWS = STAGE_ROWS;
 var STAGE_COLS = 10;
 exports.STAGE_COLS = STAGE_COLS;
-var BRICK_PADDING = 5;
+var BRICK_PADDING = 1;
 exports.BRICK_PADDING = BRICK_PADDING;
 var BRICK_WIDTH = canvas ? Math.floor((canvas.width - STAGE_PADDING * 2) / STAGE_COLS) - BRICK_PADDING : 100;
 exports.BRICK_WIDTH = BRICK_WIDTH;
-var BRICK_HEIGHT = canvas ? Math.floor((canvas.height - STAGE_PADDING * 2) / STAGE_ROWS) - BRICK_PADDING : 30;
+var BRICK_HEIGHT = canvas ? Math.floor((canvas.height - STAGE_PADDING * 2) / STAGE_ROWS) - BRICK_PADDING : 30; // export const PADDLE_WIDTH = canvas.width / 6; //150;
+
 exports.BRICK_HEIGHT = BRICK_HEIGHT;
-var PADDLE_WIDTH = 150;
-exports.PADDLE_WIDTH = PADDLE_WIDTH;
-var PADDLE_HEIGHT = 25;
+var PADDLE_HEIGHT = canvas.height / 24; //25;
+
 exports.PADDLE_HEIGHT = PADDLE_HEIGHT;
-var PADDLE_STARTX = 450;
+var PADDLE_STARTX = canvas.height; //450;
+// export const PADDLE_SPEED = 15;
+// export const BALL_SPEED = 10;
+
 exports.PADDLE_STARTX = PADDLE_STARTX;
-var PADDLE_SPEED = 15;
-exports.PADDLE_SPEED = PADDLE_SPEED;
-var BALL_SPEED = 5;
-exports.BALL_SPEED = BALL_SPEED;
 var BALL_SIZE = 20;
 exports.BALL_SIZE = BALL_SIZE;
-var BALL_STARTX = 500;
+var BALL_STARTX = canvas.height;
 exports.BALL_STARTX = BALL_STARTX;
-var BALL_STARTY = 550;
+var BALL_STARTY = canvas.width - canvas.height;
 exports.BALL_STARTY = BALL_STARTY;
 var INITIAL_LEVEL = 1;
 exports.INITIAL_LEVEL = INITIAL_LEVEL;
@@ -526,7 +534,7 @@ var LEVELS = [{
 }, {
   number: 1,
   name: 'Zero',
-  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 5, 5, 0, 0, 5, 5, 0, 0]
+  disposition: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
 }, {
   number: 2,
   name: 'Easy',
@@ -636,9 +644,6 @@ var __spreadArrays = void 0 && (void 0).__spreadArrays || function () {
 };
 
 function createBricks(level) {
-  // console.log(LEVELS);
-  // let currentLevel = ;
-  // console.log(currentLevel);
   return _setup.LEVELS.find(function (lev) {
     return lev.number === level;
   }).disposition.reduce(function (acumulator, element, i) {
@@ -688,12 +693,44 @@ var levelName = ""; //Create all bricks
 
 var bricks = (0, _helpers.createBricks)(level);
 var actualBricks = (0, _helpers.createBricks)(0);
+var paddleSpeed = 0;
+var ballSpeed = 0;
+var paddleWidth = 0;
+var dificulty = "";
+document.getElementById("dificulty").addEventListener("click", function (event) {
+  if (event.target && event.target.matches("input[type='radio']")) {
+    dificulty = event.target.value;
+  }
+});
+
+function setDificulty() {
+  switch (dificulty) {
+    case 'easy':
+      paddleSpeed = 25;
+      ballSpeed = 5;
+      paddleWidth = 250;
+      break;
+
+    case "normal":
+      paddleSpeed = 20;
+      ballSpeed = 10;
+      paddleWidth = 200;
+      break;
+
+    case "hard":
+      paddleSpeed = 15;
+      ballSpeed = 15;
+      paddleWidth = 100;
+      break;
+  }
+}
 
 function setGameOver(view) {
   gameOver = false;
 
   if (lives !== 0) {
     actualBricks = bricks;
+    view.clear();
     view.drawInfo("Play next life");
     lives = lives - 1;
     var audio = new Audio("https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3");
@@ -769,8 +806,10 @@ function gameLoop(view, bricks, paddle, ball, collision) {
 }
 
 function startGame(view) {
-  var _a, _b; //Reset display
+  var _a, _b; //get Dificulty level
 
+
+  setDificulty(); //Reset display
 
   level = (_a = _setup.LEVELS.find(function (lev) {
     return lev.number === level;
@@ -794,12 +833,12 @@ function startGame(view) {
   } //Create a Ball
 
 
-  var ball = new _Ball.Ball(_setup.BALL_SPEED, _setup.BALL_SIZE, {
+  var ball = new _Ball.Ball(ballSpeed, _setup.BALL_SIZE, {
     x: _setup.BALL_STARTX,
     y: _setup.BALL_STARTY
   }, _ball.default); //Create a paddle
 
-  var paddle = new _Paddle.Paddle(_setup.PADDLE_SPEED, _setup.PADDLE_WIDTH, _setup.PADDLE_HEIGHT, {
+  var paddle = new _Paddle.Paddle(paddleSpeed, paddleWidth, _setup.PADDLE_HEIGHT, {
     x: _setup.PADDLE_STARTX,
     y: view.canvas.height - _setup.PADDLE_HEIGHT - 5
   }, _paddle.default);
@@ -852,7 +891,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61209" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61769" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

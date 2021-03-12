@@ -8,11 +8,8 @@ import PADDLE_IMAGE from "./images/paddle.png";
 import BALL_IMAGE from "./images/ball.png";
 // Level and colors
 import {
-  PADDLE_SPEED,
-  PADDLE_WIDTH,
   PADDLE_HEIGHT,
   PADDLE_STARTX,
-  BALL_SPEED,
   BALL_SIZE,
   BALL_STARTX,
   BALL_STARTY,
@@ -31,11 +28,44 @@ let levelName: string | undefined = "";
 //Create all bricks
 let bricks = createBricks(level);
 let actualBricks = createBricks(0);
+let paddleSpeed = 0;
+let ballSpeed = 0;
+let paddleWidth = 0;
+let dificulty = "";
+
+document
+  .getElementById("dificulty")
+  .addEventListener("click", function (event) {
+    if (event.target && event.target.matches("input[type='radio']")) {
+      dificulty = event.target.value;
+    }
+  });
+
+function setDificulty{
+    switch (dificulty) {
+    case 'easy':
+      paddleSpeed = 25;
+      ballSpeed = 5;
+      paddleWidth = 250;
+    break
+    case "normal":
+      paddleSpeed = 20;
+      ballSpeed = 10;
+      paddleWidth = 200;
+    break
+    case "hard":
+      paddleSpeed = 15;
+      ballSpeed = 15;
+      paddleWidth = 100;
+    break
+  }
+}
 
 function setGameOver(view: CanvasView) {
   gameOver = false;
   if (lives !== 0) {
     actualBricks = bricks;
+    view.clear();
     view.drawInfo("Play next life");
     lives = lives - 1;
     let audio = new Audio(
@@ -116,6 +146,8 @@ function gameLoop(
 }
 
 function startGame(view: CanvasView) {
+  //get Dificulty level
+  setDificulty();
   //Reset display
   level = LEVELS.find((lev) => lev.number === level)?.number;
   levelName = LEVELS.find((lev) => lev.number === level)?.name;
@@ -134,7 +166,7 @@ function startGame(view: CanvasView) {
   }
   //Create a Ball
   const ball = new Ball(
-    BALL_SPEED,
+    ballSpeed,
     BALL_SIZE,
     {
       x: BALL_STARTX,
@@ -144,8 +176,8 @@ function startGame(view: CanvasView) {
   );
   //Create a paddle
   const paddle = new Paddle(
-    PADDLE_SPEED,
-    PADDLE_WIDTH,
+    paddleSpeed,
+    paddleWidth,
     PADDLE_HEIGHT,
     {
       x: PADDLE_STARTX,

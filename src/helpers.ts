@@ -11,9 +11,6 @@ import {
 } from "./setup";
 
 export function createBricks(level: number | undefined): Brick[] {
-  // console.log(LEVELS);
-  // let currentLevel = ;
-  // console.log(currentLevel);
   return LEVELS.find((lev) => lev.number === level).disposition.reduce(
     (acumulator, element, i) => {
       const row = Math.floor((i + 1) / STAGE_COLS); //gives the current row of the specific brick
