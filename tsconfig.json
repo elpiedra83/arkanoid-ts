@@ -8,7 +8,7 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "dist.bak",
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": "./src",
